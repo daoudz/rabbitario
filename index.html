@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rabbitario – 8-Bit Platformer</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🐰</text></svg>"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div id="game-wrapper">
+    <!-- Title Screen -->
+    <div id="title-screen" class="screen active">
+      <div class="pixel-title">RABBITARIO</div>
+      <div class="pixel-subtitle">AN 8-BIT ADVENTURE</div>
+      <div class="title-rabbit"></div>
+      <div class="menu-items">
+        <div class="menu-item selected" id="btn-start">▶ START GAME</div>
+        <div class="menu-item" id="btn-controls">★ CONTROLS</div>
+        <div class="menu-item" id="btn-sound-toggle">♪ SOUND: ON</div>
+      </div>
+      <div class="controls-panel" id="controls-panel" style="display:none">
+        <div class="ctrl-row"><span class="key">← →</span> Move</div>
+        <div class="ctrl-row"><span class="key">↑ / SPACE</span> Jump</div>
+        <div class="ctrl-row"><span class="key">P</span> Pause</div>
+        <div class="ctrl-row"><span class="key">M</span> Mute</div>
+        <div class="ctrl-row mobile-note">📱 Touch controls on mobile</div>
+      </div>
+      <div class="pixel-footer">© 2026 RABBITARIO</div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameover-screen" class="screen">
+      <div class="go-title">GAME OVER</div>
+      <div class="go-score">SCORE: <span id="go-score-val">0</span></div>
+      <div class="menu-item" id="btn-retry">▶ TRY AGAIN</div>
+      <div class="menu-item" id="btn-title">⌂ TITLE SCREEN</div>
+    </div>
+
+    <!-- Level Clear Screen -->
+    <div id="levelclear-screen" class="screen">
+      <div class="lc-title">STAGE CLEAR!</div>
+      <div class="lc-score">SCORE: <span id="lc-score-val">0</span></div>
+      <div class="lc-stars" id="lc-stars">★★★</div>
+      <div class="menu-item" id="btn-next-level">▶ NEXT STAGE</div>
+    </div>
+
+    <!-- Win Screen -->
+    <div id="win-screen" class="screen">
+      <div class="win-title">YOU WIN!</div>
+      <div class="win-msg">THE LAND IS SAVED!</div>
+      <div class="win-score">FINAL SCORE: <span id="win-score-val">0</span></div>
+      <div class="menu-item" id="btn-play-again">▶ PLAY AGAIN</div>
+    </div>
+
+    <!-- Game Canvas -->
+    <div id="game-container" style="display:none; position:relative;">
+      <canvas id="game-canvas"></canvas>
+      <!-- Mobile Controls -->
+      <div id="mobile-controls">
+        <div id="m-left" class="m-btn">◀</div>
+        <div id="m-right" class="m-btn">▶</div>
+        <div id="m-jump" class="m-btn jump-btn">▲</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/audio.js"></script>
+  <script src="js/sprites.js"></script>
+  <script src="js/tiles.js"></script>
+  <script src="js/entities.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
