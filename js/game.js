@@ -26,12 +26,21 @@
 
     // ─── Input ────────────────────────────────────────
     const keys = {};
-    const input = { left: false, right: false, jump: false };
-    let jumpHeld = false;
+    const input = { left: false, right: false, jump: false, jumpHeld: false };
+
+    // Jump buffer: remember jump presses for up to JUMP_BUFFER frames
+    // Coyote time: allow jump for up to COYOTE_FRAMES after leaving ground
+    const JUMP_BUFFER = 10;  // frames
+    const COYOTE_TIME = 6;   // frames
+    let jumpBufferFrames = 0; // counts down from JUMP_BUFFER when jump pressed
 
     document.addEventListener('keydown', e => {
         keys[e.code] = true;
         if (['ArrowUp', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) e.preventDefault();
+        // Register jump press immediately into buffer (even mid-air)
+        if (e.code === 'ArrowUp' || e.code === 'Space' || e.code === 'KeyW') {
+            jumpBufferFrames = JUMP_BUFFER;
+        }
         if (e.code === 'KeyP' || e.code === 'Escape') togglePause();
         if (e.code === 'KeyM') toggleMuteUI();
     });
@@ -40,13 +49,11 @@
     function readInput() {
         input.left = !!(keys['ArrowLeft'] || keys['KeyA']);
         input.right = !!(keys['ArrowRight'] || keys['KeyD']);
-        const jumpNow = !!(keys['ArrowUp'] || keys['Space'] || keys['KeyW']);
-        input.jump = jumpNow && !jumpHeld;
-        if (!jumpNow) jumpHeld = false;
-        if (jumpNow && input.jump) jumpHeld = true;
-        // hold to float
-        if (!jumpNow) input.jumpHeld = false;
-        else input.jumpHeld = jumpNow;
+        // jump fires when buffer has frames remaining (consumed in player.update)
+        input.jump = jumpBufferFrames > 0;
+        input.jumpHeld = !!(keys['ArrowUp'] || keys['Space'] || keys['KeyW']);
+        // Tick down buffer every frame
+        if (jumpBufferFrames > 0) jumpBufferFrames--;
     }
 
     // Mobile controls
@@ -54,13 +61,25 @@
         const mLeft = document.getElementById('m-left');
         const mRight = document.getElementById('m-right');
         const mJump = document.getElementById('m-jump');
-        const press = (el, kl, kr, kj) => {
-            el.addEventListener('touchstart', e => { e.preventDefault(); keys[kl || ''] = !!kl; keys[kr || ''] = !!kr; keys[kj || ''] = !!kj; el.classList.add('pressed'); }, { passive: false });
-            el.addEventListener('touchend', e => { e.preventDefault(); keys[kl || ''] = false; keys[kr || ''] = false; keys[kj || ''] = false; el.classList.remove('pressed'); }, { passive: false });
-        };
-        press(mLeft, 'ArrowLeft');
-        press(mRight, null, 'ArrowRight');
-        press(mJump, null, null, 'Space');
+
+        // Left / Right: simple key toggle
+        mLeft.addEventListener('touchstart', e => { e.preventDefault(); keys['ArrowLeft'] = true; mLeft.classList.add('pressed'); }, { passive: false });
+        mLeft.addEventListener('touchend', e => { e.preventDefault(); keys['ArrowLeft'] = false; mLeft.classList.remove('pressed'); }, { passive: false });
+        mRight.addEventListener('touchstart', e => { e.preventDefault(); keys['ArrowRight'] = true; mRight.classList.add('pressed'); }, { passive: false });
+        mRight.addEventListener('touchend', e => { e.preventDefault(); keys['ArrowRight'] = false; mRight.classList.remove('pressed'); }, { passive: false });
+
+        // Jump button: set buffer AND hold-key (for variable-height)
+        mJump.addEventListener('touchstart', e => {
+            e.preventDefault();
+            keys['Space'] = true;
+            jumpBufferFrames = JUMP_BUFFER;  // instant buffer fill on tap
+            mJump.classList.add('pressed');
+        }, { passive: false });
+        mJump.addEventListener('touchend', e => {
+            e.preventDefault();
+            keys['Space'] = false;
+            mJump.classList.remove('pressed');
+        }, { passive: false });
     }
     setupMobile();
 

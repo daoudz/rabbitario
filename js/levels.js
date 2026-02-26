@@ -41,16 +41,16 @@ const LEVELS = [
             { type: 'zombie', tx: 74, ty: 14 },
         ],
         collectibles: [
-            { type: 'carrot', tx: 8, ty: 13 },
-            { type: 'carrot', tx: 9, ty: 13 },
-            { type: 'coin', tx: 20, ty: 12 },
-            { type: 'coin', tx: 21, ty: 12 },
-            { type: 'coin', tx: 22, ty: 12 },
-            { type: 'carrot', tx: 35, ty: 12 },
-            { type: 'mushroom', tx: 40, ty: 10 },
-            { type: 'coin', tx: 55, ty: 11 },
-            { type: 'coin', tx: 56, ty: 11 },
-            { type: 'carrot', tx: 68, ty: 12 },
+            { type: 'carrot', tx: 8, ty: 15 },  // ground level
+            { type: 'carrot', tx: 9, ty: 15 },
+            { type: 'coin', tx: 20, ty: 13 },  // above platform row 13
+            { type: 'coin', tx: 21, ty: 13 },
+            { type: 'coin', tx: 22, ty: 13 },
+            { type: 'carrot', tx: 35, ty: 13 },  // above platform row 12
+            { type: 'mushroom', tx: 40, ty: 13 },  // on lower platform row 13
+            { type: 'coin', tx: 55, ty: 12 },  // above platform row 10
+            { type: 'coin', tx: 56, ty: 12 },
+            { type: 'carrot', tx: 68, ty: 13 },
         ],
     },
 
@@ -78,17 +78,17 @@ const LEVELS = [
             { type: 'skeleton', tx: 84, ty: 14 },
         ],
         collectibles: [
-            { type: 'coin', tx: 10, ty: 12 },
-            { type: 'coin', tx: 11, ty: 12 },
-            { type: 'carrot', tx: 22, ty: 6 },
-            { type: 'carrot', tx: 30, ty: 12 },
-            { type: 'mushroom', tx: 36, ty: 8 },
-            { type: 'coin', tx: 45, ty: 11 },
-            { type: 'coin', tx: 46, ty: 11 },
-            { type: 'carrot', tx: 58, ty: 8 },
-            { type: 'coin', tx: 65, ty: 12 },
-            { type: 'coin', tx: 66, ty: 12 },
-            { type: 'carrot', tx: 75, ty: 12 },
+            { type: 'coin', tx: 10, ty: 13 },  // ground level
+            { type: 'coin', tx: 11, ty: 13 },
+            { type: 'carrot', tx: 22, ty: 9 },  // above platform row 8
+            { type: 'carrot', tx: 30, ty: 13 },
+            { type: 'mushroom', tx: 36, ty: 10 },  // on platform row 9
+            { type: 'coin', tx: 45, ty: 13 },  // ground level
+            { type: 'coin', tx: 46, ty: 13 },
+            { type: 'carrot', tx: 58, ty: 12 },  // on platform row 11
+            { type: 'coin', tx: 65, ty: 13 },
+            { type: 'coin', tx: 66, ty: 13 },
+            { type: 'carrot', tx: 75, ty: 13 },
         ],
     },
 
@@ -111,12 +111,12 @@ const LEVELS = [
             { type: 'boss', tx: 44, ty: 11 },
         ],
         collectibles: [
-            { type: 'carrot', tx: 6, ty: 12 },
-            { type: 'coin', tx: 14, ty: 12 },
-            { type: 'coin', tx: 15, ty: 12 },
-            { type: 'mushroom', tx: 20, ty: 8 },
-            { type: 'carrot', tx: 35, ty: 12 },
-            { type: 'coin', tx: 40, ty: 12 },
+            { type: 'carrot', tx: 6, ty: 15 },  // ground level
+            { type: 'coin', tx: 14, ty: 14 },
+            { type: 'coin', tx: 15, ty: 14 },
+            { type: 'mushroom', tx: 20, ty: 12 },  // on platform row 11
+            { type: 'carrot', tx: 35, ty: 13 },  // on lower platform
+            { type: 'coin', tx: 40, ty: 14 },  // ground level
         ],
     },
 ];

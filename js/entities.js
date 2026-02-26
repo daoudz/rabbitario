@@ -20,6 +20,7 @@ class Player {
         this.w = 28; this.h = 30;
         this.vx = 0; this.vy = 0;
         this.onGround = false;
+        this.coyoteFrames = 0;   // grace period after leaving ground
         this.facing = 1;  // 1=right, -1=left
         this.alive = true;
         this.dying = false;
@@ -49,13 +50,24 @@ class Player {
         else if (input.right) { this.vx = speed; this.facing = 1; }
         else { this.vx *= 0.7; }
 
-        // Jump
-        if (input.jump && this.onGround) {
-            this.vy = -13;
+        // ── Coyote time: maintain grace frames after leaving ground ──
+        const wasOnGround = this.onGround;
+        if (wasOnGround) {
+            this.coyoteFrames = 6; // reset grace window
+        } else if (this.coyoteFrames > 0) {
+            this.coyoteFrames--;
+        }
+
+        // ── Jump ── (fires when jump buffer has frames AND coyote permits)
+        const canJump = this.onGround || this.coyoteFrames > 0;
+        if (input.jump && canJump && this.vy >= -1) {
+            this.vy = -17;              // ↑ raised from -13 → much higher arc
             this.onGround = false;
+            this.coyoteFrames = 0;     // consume coyote so no double-jump
             Audio8.SFX.jump();
         }
-        if (!input.jump && this.vy < -6) this.vy += 1.5; // variable jump
+        // Variable-height: releasing jump early cuts arc (tune cut point to match new height)
+        if (!input.jumpHeld && this.vy < -8) this.vy += 2.5;
 
         // Gravity
         this.vy = Math.min(this.vy + GRAVITY, MAX_FALL);
