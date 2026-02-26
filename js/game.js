@@ -115,7 +115,7 @@
     document.getElementById('btn-sound-toggle').addEventListener('click', toggleMuteUI);
     document.getElementById('btn-retry').addEventListener('click', () => { currentLevel = 0; startGame(); });
     document.getElementById('btn-title').addEventListener('click', () => { showScreen('title'); Audio8.stopBG(); gameState = 'title'; });
-    document.getElementById('btn-next-level').addEventListener('click', () => { currentLevel++; loadLevel(currentLevel); showScreen('game'); });
+    // btn-next-level is registered below near nextLevelScreen(), to keep it in one place
     document.getElementById('btn-play-again').addEventListener('click', () => { currentLevel = 0; startGame(); });
 
     function toggleMuteUI() {
@@ -251,8 +251,9 @@
             else if (e instanceof Skeleton) e.update(tilemap, mapW, player);
             else e.update(tilemap, mapW);
 
-            // Enemy died and fell off screen
-            if (e.dying && e.y > tilemap.length * TILE + 200) e.alive = false;
+            // Enemy fell off the bottom of the map (pit) – remove regardless of dying state
+            if (e.y > tilemap.length * TILE + 200) { e.alive = false; return; }
+
 
             if (!e.alive || e.dying) return;
             if (!e.isOnScreen(camX, W)) return;

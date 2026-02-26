@@ -217,19 +217,25 @@ class Enemy {
     }
 
     _collideH(tilemap, mapW) {
-        const col = this.vx > 0 ? Math.floor((this.x + this.w) / TILE) : Math.floor(this.x / TILE);
+        // Capture direction BEFORE any reversal (wall hit reverses vx, but edge-check must use original direction)
+        const movingRight = this.vx > 0;
+        const col = movingRight ? Math.floor((this.x + this.w) / TILE) : Math.floor(this.x / TILE);
         const r1 = Math.floor(this.y / TILE), r2 = Math.floor((this.y + this.h - 1) / TILE);
+        let hitWall = false;
         for (let r = r1; r <= r2; r++) {
             if (r < 0 || r >= tilemap.length || col < 0 || col >= mapW) continue;
-            if (tilemap[r][col] > 0) { this.vx = -this.vx; this.facingLeft = !this.facingLeft; break; }
+            if (tilemap[r][col] > 0) { this.vx = -this.vx; this.facingLeft = !this.facingLeft; hitWall = true; break; }
         }
-        // Turn at edges
-        const edgeCol = this.vx > 0 ? Math.floor((this.x + this.w) / TILE) : Math.floor(this.x / TILE);
-        const belowRow = Math.floor((this.y + this.h + 2) / TILE);
-        if (belowRow < tilemap.length && edgeCol >= 0 && edgeCol < mapW) {
-            if (tilemap[belowRow]?.[edgeCol] === 0) {
-                this.vx = -this.vx;
-                this.facingLeft = !this.facingLeft;
+        // Edge detection: look one column ahead of the ORIGINAL direction (not the reversed one)
+        // Only check edges if no wall was hit in this direction
+        if (!hitWall) {
+            const edgeCol = movingRight ? Math.floor((this.x + this.w) / TILE) : Math.floor((this.x - 1) / TILE);
+            const belowRow = Math.floor((this.y + this.h + 4) / TILE);
+            if (belowRow < tilemap.length && edgeCol >= 0 && edgeCol < mapW) {
+                if ((tilemap[belowRow]?.[edgeCol] ?? 0) === 0) {
+                    this.vx = -this.vx;
+                    this.facingLeft = !this.facingLeft;
+                }
             }
         }
     }
